@@ -1,6 +1,9 @@
+using ApiNexusERP.Repositories;
 using Microsoft.EntityFrameworkCore;
 using NugetModelsNexusERP.Data;
+using NugetModelsNexusERP.Helpers;
 using Scalar.AspNetCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +12,23 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("NexusConnection");
 builder.Services.AddDbContext<NexusContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddControllers();
+//INYECCIONES PARA EL HELPER
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<HelperSessionContextAccessor>();
+
+//REPOSITORIOS
+builder.Services.AddTransient<RepositoryDepartamentos>();
+
+
+//TEMPORAL
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Esta línea mágica corta los bucles infinitos de raíz
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -32,6 +50,24 @@ app.MapGet("/", context =>
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+
+
+// HACK TEMPORAL PARA PRUEBAS (Borrar cuando hagamos el Login JWT)
+app.Use(async (context, next) =>
+{
+    // Simulamos que el usuario de la Empresa con ID 1 está logueado
+    var claims = new List<System.Security.Claims.Claim>
+    {
+        new System.Security.Claims.Claim("EmpresaId", "1"),
+        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "Usuario Pruebas")
+    };
+    var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuth");
+    context.User = new System.Security.Claims.ClaimsPrincipal(identity);
+
+    await next();
+});
+
 
 app.MapControllers();
 
