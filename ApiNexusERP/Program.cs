@@ -1,5 +1,8 @@
+using ApiNexusERP.Mappings;
 using ApiNexusERP.Repositories;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NugetModelsNexusERP.Data;
 using NugetModelsNexusERP.Helpers;
 using Scalar.AspNetCore;
@@ -19,6 +22,8 @@ builder.Services.AddScoped<HelperSessionContextAccessor>();
 //REPOSITORIOS
 builder.Services.AddTransient<RepositoryDepartamentos>();
 
+//MAPPINGS
+builder.Services.AddAutoMapper(typeof(NexusProfile));
 
 //TEMPORAL
 builder.Services.AddControllers().AddJsonOptions(options =>
