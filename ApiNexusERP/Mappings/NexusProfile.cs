@@ -8,8 +8,17 @@ namespace ApiNexusERP.Mappings
     {
         public NexusProfile()
         {
+            //DEPARTAMENTOS
             CreateMap<Departamento, DepartamentoDTO>();
             CreateMap<DepartamentoDTO, Departamento>();
+
+            //CLIENTES
+            CreateMap<Cliente, ClienteDTO>();
+            CreateMap<ClienteDTO, Cliente>();
+
+            //EMPRESAS
+            CreateMap<Empresa, EmpresaDTO>();
+            CreateMap<EmpresaDTO, Empresa>();
         }
     }
 }

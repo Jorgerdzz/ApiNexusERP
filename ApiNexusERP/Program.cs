@@ -21,6 +21,8 @@ builder.Services.AddScoped<HelperSessionContextAccessor>();
 
 //REPOSITORIOS
 builder.Services.AddTransient<RepositoryDepartamentos>();
+builder.Services.AddTransient<RepositoryClientes>();
+builder.Services.AddTransient<RepositoryEmpresas>();
 
 //MAPPINGS
 builder.Services.AddAutoMapper(typeof(NexusProfile));
