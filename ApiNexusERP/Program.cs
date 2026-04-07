@@ -1,3 +1,4 @@
+using ApiNexusERP.Helpers;
 using ApiNexusERP.Mappings;
 using ApiNexusERP.Repositories;
 using AutoMapper;
@@ -9,6 +10,14 @@ using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//CREAMOS UNA INSTANCIA DE NUESTRO HELPER
+HelperActionOAuthService helper = new HelperActionOAuthService(builder.Configuration);
+//ESTA INSTANCIA SOLAMENTE DEBEMOS CREARLA UNA VEZ
+builder.Services.AddSingleton<HelperActionOAuthService>(helper);
+//HABILITAMOS LA SEGURIDAD DENTRO DE PROGRAM
+builder.Services.AddAuthentication(helper.GetAuthenticationSchema())
+    .AddJwtBearer(helper.GetJwtBearerOptions());
 
 // Add services to the container.
 
@@ -23,6 +32,7 @@ builder.Services.AddScoped<HelperSessionContextAccessor>();
 builder.Services.AddTransient<RepositoryDepartamentos>();
 builder.Services.AddTransient<RepositoryClientes>();
 builder.Services.AddTransient<RepositoryEmpresas>();
+builder.Services.AddTransient<RepositoryAuth>();
 
 //MAPPINGS
 builder.Services.AddAutoMapper(typeof(NexusProfile));
@@ -56,24 +66,25 @@ app.MapGet("/", context =>
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 
 
 // HACK TEMPORAL PARA PRUEBAS (Borrar cuando hagamos el Login JWT)
-app.Use(async (context, next) =>
-{
-    // Simulamos que el usuario de la Empresa con ID 1 está logueado
-    var claims = new List<System.Security.Claims.Claim>
-    {
-        new System.Security.Claims.Claim("EmpresaId", "1"),
-        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "Usuario Pruebas")
-    };
-    var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuth");
-    context.User = new System.Security.Claims.ClaimsPrincipal(identity);
+//app.Use(async (context, next) =>
+//{
+//    // Simulamos que el usuario de la Empresa con ID 1 está logueado
+//    var claims = new List<System.Security.Claims.Claim>
+//    {
+//        new System.Security.Claims.Claim("EmpresaId", "1"),
+//        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "Usuario Pruebas")
+//    };
+//    var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuth");
+//    context.User = new System.Security.Claims.ClaimsPrincipal(identity);
 
-    await next();
-});
+//    await next();
+//});
 
 
 app.MapControllers();
