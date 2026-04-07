@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NugetModelsNexusERP.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace ApiNexusERP.Controllers
 {
@@ -33,6 +34,18 @@ namespace ApiNexusERP.Controllers
             }
             else
             {
+                Claim[] claims = new []
+                {
+                    new Claim(ClaimTypes.Name, usuario.Nombre),
+                    //new System.Security.Claims.Claim("Iniciales", usuario.Nombre.ObtenerIniciales()),
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Role, usuario.Rol.ToString()),
+                    new Claim(ClaimTypes.Email, usuario.Email),
+                    new Claim("EmpresaId", usuario.EmpresaId.ToString()),
+                    new Claim("EmpleadoId", usuario.EmpleadoId?.ToString() ?? "0"),
+                    new Claim("NombreEmpresa", usuario.Empresa.NombreComercial)
+                };
+
                 SigningCredentials credentials =
                     new SigningCredentials(this.helper.GetKeyToken(), SecurityAlgorithms.HmacSha256);
 
@@ -40,6 +53,7 @@ namespace ApiNexusERP.Controllers
                     new JwtSecurityToken(
                         issuer: this.helper.Issuer,
                         audience: this.helper.Audience,
+                        claims: claims,
                         signingCredentials: credentials,
                         expires: DateTime.UtcNow.AddMinutes(20),
                         notBefore: DateTime.UtcNow
