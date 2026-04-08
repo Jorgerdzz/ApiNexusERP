@@ -37,7 +37,6 @@ namespace ApiNexusERP.Controllers
                 Claim[] claims = new []
                 {
                     new Claim(ClaimTypes.Name, usuario.Nombre),
-                    //new System.Security.Claims.Claim("Iniciales", usuario.Nombre.ObtenerIniciales()),
                     new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                     new Claim(ClaimTypes.Role, usuario.Rol.ToString()),
                     new Claim(ClaimTypes.Email, usuario.Email),

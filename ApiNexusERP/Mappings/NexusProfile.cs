@@ -19,6 +19,15 @@ namespace ApiNexusERP.Mappings
             //EMPRESAS
             CreateMap<Empresa, EmpresaDTO>();
             CreateMap<EmpresaDTO, Empresa>();
+
+            //EMPLEADOS
+            CreateMap<Empleado, EmpleadoDTO>()
+                .ForMember(dest => dest.NombreDepartamento, opt => opt.MapFrom(src => src.Departamento.Nombre))
+                .ForMember(dest => dest.IbanEnmascarado, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.Iban) || src.Iban.Length < 4
+                    ? src.Iban
+                    : $"**** **** **** {src.Iban.Substring(src.Iban.Length - 4)}"));
+            CreateMap<EmpleadoDTO, Empleado>();
         }
     }
 }
