@@ -43,7 +43,7 @@ namespace ApiNexusERP.Controllers
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("EmpresaId", usuario.EmpresaId.ToString()),
                     new Claim("EmpleadoId", usuario.EmpleadoId?.ToString() ?? "0"),
-                    new Claim("NombreEmpresa", usuario.Empresa.NombreComercial)
+                    new Claim("NombreEmpresa", usuario.Empresa?.NombreComercial ?? "Sin Empresa")
                 };
 
                 SigningCredentials credentials =
