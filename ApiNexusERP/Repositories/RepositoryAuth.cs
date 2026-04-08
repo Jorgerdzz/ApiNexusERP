@@ -21,7 +21,7 @@ namespace ApiNexusERP.Repositories
                                     join s in this.context.SeguridadUsuarios.IgnoreQueryFilters() on u.Id equals s.IdUsuario
                                     join e in this.context.Empresas.IgnoreQueryFilters() on u.EmpresaId equals e.Id
                                     where u.Email == email
-                                    select new { Usuario = u, Seguridad = s })
+                                    select new { Usuario = u, Seguridad = s, Empresa = e })
                                     .FirstOrDefaultAsync();
 
             if (datosLogin == null) return null;
