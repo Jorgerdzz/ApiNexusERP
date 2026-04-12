@@ -28,6 +28,18 @@ namespace ApiNexusERP.Mappings
                     ? src.Iban
                     : $"**** **** **** {src.Iban.Substring(src.Iban.Length - 4)}"));
             CreateMap<EmpleadoDTO, Empleado>();
+
+            //NOMINAS
+            CreateMap<NominaDetalle, NominaDetalleDTO>();
+            CreateMap<NominaDetalleDTO, NominaDetalle>(MemberList.None);
+
+            CreateMap<Nomina, NominaDTO>()
+                .ForMember(dest => dest.NombreCompletoEmpleado, opt => opt.MapFrom(src => src.Empleado.Nombre + " " + src.Empleado.Apellidos))
+                .ForMember(dest => dest.DniEmpleado, opt => opt.MapFrom(src => src.Empleado.Dni))
+                .ForMember(dest => dest.Detalles, opt => opt.MapFrom(src => src.NominaDetalles));
+
+            CreateMap<NominaDTO, Nomina>(MemberList.None)
+                .ForMember(dest => dest.NominaDetalles, opt => opt.MapFrom(src => src.Detalles));
         }
     }
 }
