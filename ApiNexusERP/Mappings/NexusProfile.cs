@@ -40,6 +40,21 @@ namespace ApiNexusERP.Mappings
 
             CreateMap<NominaDTO, Nomina>(MemberList.None)
                 .ForMember(dest => dest.NominaDetalles, opt => opt.MapFrom(src => src.Detalles));
+
+            //CONTABILIDAD
+
+            // 1. Cuentas
+            CreateMap<CuentasContable, CuentaContableDTO>();
+            CreateMap<CuentaContableDTO, CuentasContable>();
+
+            // 2. Apuntes (Aplanando la cuenta relacionada)
+            CreateMap<ApuntesContable, ApunteContableDTO>()
+                .ForMember(dest => dest.CuentaCodigo, opt => opt.MapFrom(src => src.Cuenta.Codigo))
+                .ForMember(dest => dest.CuentaNombre, opt => opt.MapFrom(src => src.Cuenta.Nombre));
+
+            // 3. Asientos (Incluyendo su lista de apuntes)
+            CreateMap<AsientosContable, AsientoContableDTO>()
+                .ForMember(dest => dest.Apuntes, opt => opt.MapFrom(src => src.ApuntesContables));
         }
     }
 }

@@ -35,6 +35,7 @@ builder.Services.AddTransient<RepositoryEmpresas>();
 builder.Services.AddTransient<RepositoryAuth>();
 builder.Services.AddTransient<RepositoryEmpleados>();
 builder.Services.AddTransient<RepositoryNominas>();
+builder.Services.AddTransient<RepositoryContabilidad>();
 
 //MAPPINGS
 builder.Services.AddAutoMapper(typeof(NexusProfile));
