@@ -8,19 +8,23 @@ namespace ApiNexusERP.Mappings
     {
         public NexusProfile()
         {
-            //DEPARTAMENTOS
+            // --- DEPARTAMENTOS ---
+
             CreateMap<Departamento, DepartamentoDTO>();
             CreateMap<DepartamentoDTO, Departamento>();
 
-            //CLIENTES
+            // --- CLIENTES ---
+
             CreateMap<Cliente, ClienteDTO>();
             CreateMap<ClienteDTO, Cliente>();
 
-            //EMPRESAS
+            // --- EMPRESAS ---
+
             CreateMap<Empresa, EmpresaDTO>();
             CreateMap<EmpresaDTO, Empresa>();
 
-            //EMPLEADOS
+            // --- EMPLEADOS ---
+
             CreateMap<Empleado, EmpleadoDTO>()
                 .ForMember(dest => dest.NombreDepartamento, opt => opt.MapFrom(src => src.Departamento.Nombre))
                 .ForMember(dest => dest.IbanEnmascarado, opt => opt.MapFrom(src =>
@@ -29,7 +33,8 @@ namespace ApiNexusERP.Mappings
                     : $"**** **** **** {src.Iban.Substring(src.Iban.Length - 4)}"));
             CreateMap<EmpleadoDTO, Empleado>();
 
-            //NOMINAS
+            // --- NOMINAS ---
+
             CreateMap<NominaDetalle, NominaDetalleDTO>();
             CreateMap<NominaDetalleDTO, NominaDetalle>(MemberList.None);
 
@@ -41,7 +46,7 @@ namespace ApiNexusERP.Mappings
             CreateMap<NominaDTO, Nomina>(MemberList.None)
                 .ForMember(dest => dest.NominaDetalles, opt => opt.MapFrom(src => src.Detalles));
 
-            //CONTABILIDAD
+            // --- CONTABILIDAD ---
 
             // 1. Cuentas
             CreateMap<CuentasContable, CuentaContableDTO>();
@@ -55,6 +60,22 @@ namespace ApiNexusERP.Mappings
             // 3. Asientos (Incluyendo su lista de apuntes)
             CreateMap<AsientosContable, AsientoContableDTO>()
                 .ForMember(dest => dest.Apuntes, opt => opt.MapFrom(src => src.ApuntesContables));
+
+
+            // --- FACTURACIÓN ---
+
+            // 1. Detalles de Factura
+            CreateMap<FacturaDetalle, FacturaDetalleDTO>();
+            CreateMap<FacturaDetalleDTO, FacturaDetalle>(MemberList.None);
+
+            // 2. Cabecera de Factura (Ida)
+            CreateMap<Factura, FacturaDTO>()
+                .ForMember(dest => dest.ClienteRazonSocial, opt => opt.MapFrom(src => src.Cliente.RazonSocial))
+                .ForMember(dest => dest.Detalles, opt => opt.MapFrom(src => src.FacturaDetalles));
+
+            // 3. Cabecera de Factura (Vuelta)
+            CreateMap<FacturaDTO, Factura>(MemberList.None)
+                .ForMember(dest => dest.FacturaDetalles, opt => opt.MapFrom(src => src.Detalles));
         }
     }
 }

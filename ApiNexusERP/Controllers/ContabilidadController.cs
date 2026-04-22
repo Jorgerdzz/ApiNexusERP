@@ -50,7 +50,7 @@ namespace ApiNexusERP.Controllers
         }
 
         [HttpGet("[action]/{idCuenta}")]
-        public async Task<ActionResult> Extracto(int idCuenta, [FromQuery] DateTime desde, [FromQuery] DateTime hasta)
+        public async Task<ActionResult> LibroMayor(int idCuenta, [FromQuery] DateTime desde, [FromQuery] DateTime hasta)
         {
             var saldoAnterior = await this.repo.GetSaldoAnteriorAsync(idCuenta, desde);
             var apuntes = await this.repo.GetExtractoCuentaAsync(idCuenta, desde, hasta);
