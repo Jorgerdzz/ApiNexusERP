@@ -76,6 +76,11 @@ namespace ApiNexusERP.Mappings
             // 3. Cabecera de Factura (Vuelta)
             CreateMap<FacturaDTO, Factura>(MemberList.None)
                 .ForMember(dest => dest.FacturaDetalles, opt => opt.MapFrom(src => src.Detalles));
+
+
+            // --- REPORTS ---
+            CreateMap<ReporteMensualDTO, ReporteMensualDTO>(); // Mapeos simples para colecciones
+            CreateMap<ReporteDepartamentoDTO, ReporteDepartamentoDTO>();
         }
     }
 }
