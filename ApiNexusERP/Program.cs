@@ -8,6 +8,7 @@ using NugetModelsNexusERP.Data;
 using NugetModelsNexusERP.Helpers;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using ApiNexusERP.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddTransient<RepositoryContabilidad>();
 builder.Services.AddTransient<RepositoryFacturacion>();
 builder.Services.AddTransient<RepositoryEstadisticas>();
 builder.Services.AddTransient<RepositoryUsuario>();
+builder.Services.AddTransient<RepositoryBusqueda>();
 
 //MAPPINGS
 builder.Services.AddAutoMapper(typeof(NexusProfile));
@@ -66,6 +68,8 @@ app.MapGet("/", context =>
 });
 
 app.UseHttpsRedirection();
+// Añadir nuestro escudo protector global
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

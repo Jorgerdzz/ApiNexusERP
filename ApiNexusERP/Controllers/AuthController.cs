@@ -65,5 +65,24 @@ namespace ApiNexusERP.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> Register(RegistroDTO model)
+        {
+            try
+            {
+                Usuario usuarioCreado = await this.repo.RegisterUserAsync(model);
+                return Ok(new { mensaje = "Registro completado con éxito. Ya puedes iniciar sesión en tu nuevo entorno de NexusERP." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error interno al intentar registrar la empresa. Por favor, inténtalo de nuevo." });
+            }
+        }
+
     }
 }
