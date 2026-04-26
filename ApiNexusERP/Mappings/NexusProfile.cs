@@ -23,6 +23,10 @@ namespace ApiNexusERP.Mappings
             CreateMap<Empresa, EmpresaDTO>();
             CreateMap<EmpresaDTO, Empresa>();
 
+            // --- USUARIOS ---
+            CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<UsuarioDTO, Usuario>();
+
             // --- EMPLEADOS ---
 
             CreateMap<Empleado, EmpleadoDTO>()
@@ -78,9 +82,10 @@ namespace ApiNexusERP.Mappings
                 .ForMember(dest => dest.FacturaDetalles, opt => opt.MapFrom(src => src.Detalles));
 
 
-            // --- REPORTS ---
+            // --- ESTADISTICAS ---
             CreateMap<ReporteMensualDTO, ReporteMensualDTO>(); // Mapeos simples para colecciones
             CreateMap<ReporteDepartamentoDTO, ReporteDepartamentoDTO>();
+            CreateMap<MetricasDashboardDTO, MetricasDashboardDTO>();
         }
     }
 }

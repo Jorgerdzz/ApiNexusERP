@@ -24,25 +24,30 @@ namespace ApiNexusERP.Controllers
         [HttpGet("[action]/{anio}")]
         public async Task<ActionResult<List<ReporteMensualDTO>>> Ingresos(int anio)
         {
-            int empresaId = this.contextAccessor.GetEmpresaIdSession();
-            var data = await this.repo.GetIngresosPorMesAsync(anio, empresaId);
+            var data = await this.repo.GetIngresosPorMesAsync(anio);
             return Ok(data);
         }
 
         [HttpGet("[action]/{anio}")]
         public async Task<ActionResult<List<ReporteMensualDTO>>> Gastos(int anio)
         {
-            int empresaId = this.contextAccessor.GetEmpresaIdSession();
-            var data = await this.repo.GetGastosPorMesAsync(anio, empresaId);
+            var data = await this.repo.GetGastosPorMesAsync(anio);
             return Ok(data);
         }
 
         [HttpGet("[action]/{anio}")]
         public async Task<ActionResult<List<ReporteDepartamentoDTO>>> CostesDepartamento(int anio)
         {
-            int empresaId = this.contextAccessor.GetEmpresaIdSession();
-            var data = await this.repo.GetCostesPorDepartamentoAsync(anio, empresaId);
+            var data = await this.repo.GetCostesPorDepartamentoAsync(anio);
             return Ok(data);
+        }
+
+        // Añade este endpoint dentro de tu ReportsController
+        [HttpGet("[action]/{anio}")]
+        public async Task<ActionResult<MetricasDashboardDTO>> MetricasGlobales(int anio)
+        {
+            var metricas = await this.repo.GetEstadisticasAsync(anio);
+            return Ok(metricas);
         }
     }
 }

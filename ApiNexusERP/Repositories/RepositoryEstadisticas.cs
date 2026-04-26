@@ -13,10 +13,10 @@ namespace ApiNexusERP.Repositories
             this.context = context;
         }
 
-        public async Task<List<ReporteMensualDTO>> GetIngresosPorMesAsync(int anio, int empresaId)
+        public async Task<List<ReporteMensualDTO>> GetIngresosPorMesAsync(int anio)
         {
             return await this.context.Facturas
-                .Where(f => f.FechaEmision.Year == anio && f.EmpresaId == empresaId)
+                .Where(f => f.FechaEmision.Year == anio)
                 .GroupBy(f => f.FechaEmision.Month)
                 .Select(g => new ReporteMensualDTO
                 {
@@ -27,10 +27,10 @@ namespace ApiNexusERP.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<ReporteMensualDTO>> GetGastosPorMesAsync(int anio, int empresaId)
+        public async Task<List<ReporteMensualDTO>> GetGastosPorMesAsync(int anio)
         {
             return await this.context.ControlGastos
-                .Where(c => c.Anio == anio && c.EmpresaId == empresaId)
+                .Where(c => c.Anio == anio)
                 .GroupBy(c => c.Mes)
                 .Select(g => new ReporteMensualDTO
                 {
@@ -41,11 +41,11 @@ namespace ApiNexusERP.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<ReporteDepartamentoDTO>> GetCostesPorDepartamentoAsync(int anio, int empresaId)
+        public async Task<List<ReporteDepartamentoDTO>> GetCostesPorDepartamentoAsync(int anio)
         {
             return await this.context.ControlGastos
                 .Include(c => c.Departamento)
-                .Where(c => c.Anio == anio && c.EmpresaId == empresaId)
+                .Where(c => c.Anio == anio)
                 .GroupBy(c => c.Departamento.Nombre)
                 .Select(g => new ReporteDepartamentoDTO
                 {
@@ -54,6 +54,29 @@ namespace ApiNexusERP.Repositories
                 })
                 .OrderByDescending(r => r.Total)
                 .ToListAsync();
+        }
+
+        public async Task<MetricasDashboardDTO> GetEstadisticasAsync(int anio)
+        {
+            MetricasDashboardDTO metricas = new MetricasDashboardDTO();
+
+            // SEGURIDAD: Añadimos el filtro por empresa en los AnyAsync
+            metricas.TieneDepartamentos = await this.context.Departamentos.AnyAsync();
+            metricas.TieneClientes = await this.context.Clientes.AnyAsync();
+            metricas.TieneEmpleados = await this.context.Empleados.AnyAsync();
+
+            metricas.TotalFacturadoAnual = await this.context.Facturas
+                .Where(f => f.FechaEmision.Year == anio)
+                .SumAsync(f => f.TotalFactura);
+
+            metricas.TotalGastoSalarial = await this.context.ControlGastos
+                .Where(c => c.Anio == anio)
+                .SumAsync(c => c.ImporteGasto);
+
+            metricas.FacturasPendientes = await this.context.Facturas
+                .CountAsync(f => f.Estado == "Pendiente");
+
+            return metricas;
         }
     }
 }
