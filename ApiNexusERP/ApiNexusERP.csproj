@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>03793e14-9554-49e0-940c-f139aae6efa4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.14.0" />
-    <PackageReference Include="NugetModelsNexusERP" Version="1.0.0" />
+    <PackageReference Include="NugetModelsNexusERP" Version="2.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.13.18" />
   </ItemGroup>
 

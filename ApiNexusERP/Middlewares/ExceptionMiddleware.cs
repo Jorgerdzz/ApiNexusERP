@@ -40,7 +40,7 @@ namespace ApiNexusERP.Middlewares
                 statusCode = context.Response.StatusCode,
                 mensaje = "Ha ocurrido un error interno en el servidor. Por favor, contacte con soporte técnico.",
                 // Opcional: Puedes descomentar la línea de abajo solo mientras desarrollas para ver por qué explotó
-                // detalle = exception.Message 
+                detalle = exception.InnerException?.Message ?? exception.Message //
             };
 
             var jsonResponse = JsonSerializer.Serialize(response);
