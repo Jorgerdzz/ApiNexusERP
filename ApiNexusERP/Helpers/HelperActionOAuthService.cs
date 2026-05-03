@@ -11,11 +11,11 @@ namespace ApiNexusERP.Helpers
         public string Audience { get; set; }
         public string SecretKey { get; set; }
 
-        public HelperActionOAuthService(IConfiguration configuration)
+        public HelperActionOAuthService(IConfiguration configuration, string secretKey)
         {
             this.Issuer = configuration.GetValue<string>("ApiOAuthToken:Issuer");
             this.Audience = configuration.GetValue<string>("ApiOAuthToken:Audience");
-            this.SecretKey = configuration.GetValue<string>("ApiOAuthToken:SecretKey");
+            this.SecretKey = secretKey;
         }
 
         public SymmetricSecurityKey GetKeyToken()
