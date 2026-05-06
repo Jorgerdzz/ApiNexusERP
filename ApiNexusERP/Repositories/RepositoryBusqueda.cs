@@ -32,7 +32,7 @@ namespace ApiNexusERP.Repositories
                     Categoria = "Empleado",
                     Titulo = $"{e.Nombre} {e.Apellidos}",
                     Subtitulo = $"DNI: {e.Dni}",
-                    Url = $"/empleados/detalle/{e.Id}", // Ajusta esta URL a cómo sea en tu Frontend
+                    Url = $"/Empleados/Details/{e.Id}", // Ajusta esta URL a cómo sea en tu Frontend
                     Icono = "fas fa-user"
                 })
                 .ToListAsync();
@@ -47,7 +47,7 @@ namespace ApiNexusERP.Repositories
                     Categoria = "Cliente",
                     Titulo = c.RazonSocial,
                     Subtitulo = $"CIF: {c.CifNif}",
-                    Url = $"/clientes/detalle/{c.Id}",
+                    Url = $"/Clientes/Details/{c.Id}",
                     Icono = "fas fa-building"
                 })
                 .ToListAsync();
@@ -61,7 +61,7 @@ namespace ApiNexusERP.Repositories
                     Categoria = "Factura",
                     Titulo = $"Factura {f.NumeroFactura}",
                     Subtitulo = $"Total: {f.TotalFactura}€",
-                    Url = $"/facturas/detalle/{f.Id}",
+                    Url = $"/Facturacion/Details/{f.Id}",
                     Icono = "fas fa-file-invoice-dollar"
                 })
                 .ToListAsync();
