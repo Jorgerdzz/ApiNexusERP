@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NugetModelsNexusERP.Data;
 using NugetModelsNexusERP.Models;
-using System.Threading.Tasks;
 
 namespace ApiNexusERP.Repositories
 {
@@ -30,7 +29,10 @@ namespace ApiNexusERP.Repositories
 
         public async Task<Usuario> UpdatePerfilUsuarioAsync(int idUsuario, string nombre, string email)
         {
-            Usuario user = await this.FindUsuarioAsync(idUsuario);
+            Usuario user = await this.context.Usuarios
+                .Include(u => u.Empleado)
+                .FirstOrDefaultAsync(u => u.Id == idUsuario);
+
             if (user == null) return null;
 
             bool emailExiste = await this.context.Usuarios
@@ -40,6 +42,13 @@ namespace ApiNexusERP.Repositories
 
             user.Nombre = nombre;
             user.Email = email;
+
+            if (user.Empleado != null)
+            {
+                user.Empleado.EmailCorporativo = email;
+                this.context.Empleados.Update(user.Empleado);
+            }
+
             await this.context.SaveChangesAsync();
             return user;
         }
