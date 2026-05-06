@@ -1,11 +1,10 @@
-﻿using ApiNexusERP.Repositories;
+﻿using ApiNexusERP.DTOs;
+using ApiNexusERP.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ApiNexusERP.DTOs;
+using NugetModelsNexusERP.Helpers;
 using NugetModelsNexusERP.Models;
-using System.Threading.Tasks;
 
 namespace ApiNexusERP.Controllers
 {
@@ -16,11 +15,13 @@ namespace ApiNexusERP.Controllers
     {
         private RepositoryNominas repo;
         private IMapper mapper;
+        private HelperSessionContextAccessor contextAccessor;
 
-        public NominasController(RepositoryNominas repo, IMapper mapper)
+        public NominasController(RepositoryNominas repo, IMapper mapper, HelperSessionContextAccessor contextAccessor)
         {
             this.repo = repo;
             this.mapper = mapper;
+            this.contextAccessor = contextAccessor;
         }
 
         [HttpGet("{id}")]
@@ -61,6 +62,9 @@ namespace ApiNexusERP.Controllers
         public async Task<ActionResult<NominaDTO>> Generar(NominaDTO nominaDTO)
         {
             Nomina nomina = this.mapper.Map<Nomina>(nominaDTO);
+
+            nomina.EmpresaId = this.contextAccessor.GetEmpresaIdSession();
+
             Nomina nominaGuardada = await this.repo.GuardarNominaCompletaAsync(nomina);
 
             if (nominaGuardada == null)
