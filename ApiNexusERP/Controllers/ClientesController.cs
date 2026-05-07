@@ -1,14 +1,14 @@
 ﻿using ApiNexusERP.DTOs;
 using ApiNexusERP.Repositories;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NugetModelsNexusERP.Helpers;
 using NugetModelsNexusERP.Models;
-using System.Threading.Tasks;
 
 namespace ApiNexusERP.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase
